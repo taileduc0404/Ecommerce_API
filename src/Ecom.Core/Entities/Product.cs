@@ -14,6 +14,6 @@ namespace Ecom.Core.Entities
 
 		//Navignational Property
 		public virtual Category Category { get; set; }
-		public Category CategoyId { get; set; }
+		public int CategoyId { get; set; }
 	}
 }

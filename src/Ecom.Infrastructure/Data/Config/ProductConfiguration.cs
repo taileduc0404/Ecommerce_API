@@ -17,7 +17,6 @@ namespace Ecom.Infrastructure.Data.Config
 			builder.Property(x => x.Id).IsRequired();
 			builder.Property(x => x.Name).HasMaxLength(30).IsRequired();
 			builder.Property(x => x.Price).HasColumnType("decimal(18,2)");
-			builder.HasOne(x => x.Category).WithMany().HasForeignKey(x => x.CategoyId);
 		}
 	}
 }
