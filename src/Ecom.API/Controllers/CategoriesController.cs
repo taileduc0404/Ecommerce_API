@@ -95,5 +95,27 @@ namespace Ecom.API.Controllers
 			}
 
 		}
+
+		[HttpDelete]
+		public async Task<IActionResult> DeleteCategory(int id)
+		{
+			try
+			{
+				if (ModelState.IsValid)
+				{
+					var existCategory = await _u.CategoryRepository.GetAsync(id);
+					if (existCategory is not null)
+					{
+						await _u.CategoryRepository.DeletetAsync(existCategory.Id);
+						return Ok(existCategory);
+					}
+				}
+				return BadRequest("Category Not Found.");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
 	}
 }
