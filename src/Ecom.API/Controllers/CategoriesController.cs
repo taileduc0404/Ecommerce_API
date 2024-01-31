@@ -1,4 +1,5 @@
-﻿using Ecom.Core.Entities;
+﻿using Ecom.API.DTOs;
+using Ecom.Core.Entities;
 using Ecom.Core.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -37,6 +38,33 @@ namespace Ecom.API.Controllers
 				return BadRequest("Category [{id}] Not Found.");
 			}
 			return Ok(category);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> AddCategory(CategoryDto categoryDto)
+		{
+			try
+			{
+				if (ModelState.IsValid)
+				{
+					var category = new Category
+					{
+						Name = categoryDto.Name,
+						Description = categoryDto.Description
+					};
+
+					await _u.CategoryRepository.AddAsync(category);
+					return Ok(categoryDto);
+				}
+				else
+				{
+					return BadRequest(categoryDto);
+				}
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
 		}
 	}
 }
