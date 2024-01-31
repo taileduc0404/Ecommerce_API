@@ -66,5 +66,34 @@ namespace Ecom.API.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
+
+		[HttpPut]
+		public async Task<IActionResult> UpdateCategory(CategoryDto categoryDto, int id)
+		{
+			try
+			{
+				if (ModelState.IsValid)
+				{
+					var oldCategory = await _u.CategoryRepository.GetAsync(id);
+					if (oldCategory is not null)
+					{
+						// gán dữ liệu mới vào
+						oldCategory.Name = categoryDto.Name;
+						oldCategory.Description = categoryDto.Description;
+
+						// cập nhật lại category
+						await _u.CategoryRepository.UpdateAsync(oldCategory, id);
+						return Ok(categoryDto);
+					}
+
+				}
+				return BadRequest("Category Not Found.");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+
+		}
 	}
 }
