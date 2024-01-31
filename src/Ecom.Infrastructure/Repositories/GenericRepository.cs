@@ -25,7 +25,7 @@ namespace Ecom.Infrastructure.Repositories
 			await _context.SaveChangesAsync();
 		}
 
-		public async Task DeletetAsync(T id)
+		public async Task DeletetAsync(int id)
 		{
 			var entity = await _context.Set<T>().FindAsync(id);
 			_context.Set<T>().Remove(entity);
@@ -64,12 +64,12 @@ namespace Ecom.Infrastructure.Repositories
 			return await query.ToListAsync();
 		}
 
-		public async Task<T> GetAsync(T id)
+		public async Task<T> GetAsync(int id)
 		{
 			return await (_context.Set<T>().FindAsync(id));
 		}
 
-		public async Task UpdateAsync(T entity, T id)
+		public async Task UpdateAsync(T entity, int id)
 		{
 			var oldEntity = await _context.Set<T>().FindAsync(id);
 			if (oldEntity is not null)
