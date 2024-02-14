@@ -14,6 +14,7 @@ namespace Ecom.Infrastructure.Repositories
 
 		public ICategoryRepository CategoryRepository { get; }
 		public IProductRepository ProductRepository { get; }
+
 		public UnitOfWork(ApplicationDbContext context)
 		{
 			_context = context;
