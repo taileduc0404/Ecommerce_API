@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ecom.Core.Interfaces
 {
-	public interface IProductRepository:IGenericRepository<Product>
-	{
-	}
+    public interface IProductRepository : IGenericRepository<Product>
+    {
+    }
 }

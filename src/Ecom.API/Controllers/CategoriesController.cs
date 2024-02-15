@@ -24,20 +24,21 @@ namespace Ecom.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllCategory()
         {
-            var allCategory = await _u.CategoryRepository.GetAllAsync();
+            var allCategories = await _u.CategoryRepository.GetAllAsync();
 
-            if (allCategory != null)
+            if (allCategories is not null)
             {
-                var res = _mapper.Map<IReadOnlyList<Category>, IReadOnlyList<ListingCategoryDto>>(allCategory);
-                //var res = allCategory.Select(x => new CategoryDto
+                var res = _mapper.Map<IReadOnlyList<Category>, IReadOnlyList<ListingCategoryDto>>(allCategories);
+                //var res = allCategories.Select(x => new ListingCategoryDto
                 //{
+                //    Id = x.Id,
                 //    Name = x.Name,
-                //    Description = x.Description,
+                //    Description = x.Description
                 //}).ToList();
-
                 return Ok(res);
+
             }
-            return BadRequest("Category Not Found.");
+            return BadRequest("Not Found");
         }
 
         [HttpGet]

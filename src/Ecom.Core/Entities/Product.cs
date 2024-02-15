@@ -13,7 +13,7 @@ namespace Ecom.Core.Entities
 		public decimal Price { get; set; }
 
 		//Navignational Property
+		public int CategoryId { get; set; }
 		public virtual Category Category { get; set; }
-		public int CategoyId { get; set; }
 	}
 }
