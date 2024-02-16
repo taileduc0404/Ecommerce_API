@@ -52,13 +52,13 @@ namespace Ecom.Infrastructure.Repositories
             return true;
         }
 
-
         public async Task<bool> UpdateAsync(int id, UpdateProductDto dto)
         {
-            var currentProduct = await _context.products.FindAsync(id);
+            var currentProduct = await _context.products.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
             if (currentProduct is not null)
             {
-                var source = "";
+
+                var src = "";
                 if (dto.Image is not null)
                 {
                     var root = "/images/products/";
@@ -67,35 +67,81 @@ namespace Ecom.Infrastructure.Repositories
                     {
                         Directory.CreateDirectory("wwwroot" + root);
                     }
-                    source = root + productName;
-                    var picInfo = _fileProvider.GetFileInfo(source);
+
+                    src = root + productName;
+                    var picInfo = _fileProvider.GetFileInfo(src);
                     var rootPath = picInfo.PhysicalPath;
                     using (var fileStream = new FileStream(rootPath, FileMode.Create))
                     {
                         await dto.Image.CopyToAsync(fileStream);
                     }
-
-
                 }
-
-                //remove oldPicture
+                //remove old picture
                 if (!string.IsNullOrEmpty(currentProduct.ProductPicture))
                 {
-                    //delete picture
-                    var pictureInfo = _fileProvider.GetFileInfo(currentProduct.ProductPicture);
-                    var rootPath = pictureInfo.PhysicalPath;
+                    //delete old picture
+                    var picInfo = _fileProvider.GetFileInfo(currentProduct.ProductPicture);
+                    var rootPath = picInfo.PhysicalPath;
                     System.IO.File.Delete(rootPath);
                 }
 
-                //Create New Product
+                //update product
                 var res = _mapper.Map<Product>(dto);
-                res.ProductPicture = source;
+                res.ProductPicture = src;
+                res.Id = id;
                 _context.products.Update(res);
                 await _context.SaveChangesAsync();
+
+
                 return true;
+
             }
             return false;
         }
+
+        //public async Task<bool> UpdateAsync(int id, UpdateProductDto dto)
+        //{
+        //    var currentProduct = await _context.products.FindAsync(id);
+        //    if (currentProduct is not null)
+        //    {
+        //        var source = "";
+        //        if (dto.Image is not null)
+        //        {
+        //            var root = "/images/products/";
+        //            var productName = $"{Guid.NewGuid()}" + dto.Image.FileName;
+        //            if (!Directory.Exists("wwwroot" + root))
+        //            {
+        //                Directory.CreateDirectory("wwwroot" + root);
+        //            }
+        //            source = root + productName;
+        //            var picInfo = _fileProvider.GetFileInfo(source);
+        //            var rootPath = picInfo.PhysicalPath;
+        //            using (var fileStream = new FileStream(rootPath, FileMode.Create))
+        //            {
+        //                await dto.Image.CopyToAsync(fileStream);
+        //            }
+
+
+        //        }
+
+        //        //remove oldPicture
+        //        if (!string.IsNullOrEmpty(currentProduct.ProductPicture))
+        //        {
+        //            //delete picture
+        //            var pictureInfo = _fileProvider.GetFileInfo(currentProduct.ProductPicture);
+        //            var rootPath = pictureInfo.PhysicalPath;
+        //            System.IO.File.Delete(rootPath);
+        //        }
+
+        //        //Create New Product
+        //        var res = _mapper.Map<Product>(dto);
+        //        res.ProductPicture = source;
+        //        _context.products.Update(res);
+        //        await _context.SaveChangesAsync();
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
         public async Task<bool> DeleteAsyncWithPicture(int id)
         {
