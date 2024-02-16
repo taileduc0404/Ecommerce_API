@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using Ecom.API.DTOs;
-using Ecom.Core.Entities;
+using Ecom.Core.DTOs;
 using Ecom.Core.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecom.API.Controllers
@@ -36,27 +34,60 @@ namespace Ecom.API.Controllers
             return Ok(res);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> AddProduct(AddProductDto dto)
+        [HttpPost()]
+        public async Task<ActionResult> AddProduct([FromForm] AddProductDto productDto)
         {
             try
             {
-                if(ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
-                    var res = _mapper.Map<Product>(dto);
-                    await _u.ProductRepository.AddAsync(res);
-                    return Ok(dto);
+                    var res = await _u.ProductRepository.AddAsync(productDto);
+                    return res ? Ok(productDto) : BadRequest(res);
                 }
-                else
-                {
-                    return BadRequest("Cannot add product");
-                }
+                return BadRequest(productDto);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+
+                return BadRequest(ex.Message);
             }
 
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateProduct(int id, [FromForm] UpdateProductDto dto)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var res = await _u.ProductRepository.UpdateAsync(id, dto);
+                    return res ? Ok(dto) : BadRequest(res);
+                }
+                return BadRequest(dto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteProduct(int id)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var res = await _u.ProductRepository.DeleteAsyncWithPicture(id);
+                    return Ok("Product Deleted");
+                }
+                return NotFound("Product Not Found");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
