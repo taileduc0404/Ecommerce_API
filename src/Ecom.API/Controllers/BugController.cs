@@ -1,5 +1,5 @@
-﻿using Ecom.Infrastructure.Data;
-using Microsoft.AspNetCore.Http;
+﻿
+using Ecom.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecom.API.Controllers
@@ -10,11 +10,36 @@ namespace Ecom.API.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public BugController(ApplicationDbContext context) 
+        public BugController(ApplicationDbContext context)
         {
-            this._context = context;
+            _context = context;
         }
-
-
+        [HttpGet("not-found")]
+        public ActionResult GetNotFound()
+        {
+            var product = _context.products.Find(50);
+            if (product is null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
+        }
+        [HttpGet("server-error")]
+        public ActionResult GetServerError()
+        {
+            var product = _context.products.Find(50);
+            product.Name = "";
+            return Ok();
+        }
+        [HttpGet("bad-request/{id}")]
+        public ActionResult GetNotfoundRequest(int id)
+        {
+            return Ok();
+        }
+        [HttpGet("bad-request")]
+        public ActionResult GetBadRequest()
+        {
+            return BadRequest();
+        }
     }
 }
