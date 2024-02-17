@@ -1,3 +1,4 @@
+using Ecom.API.Middleware;
 using Ecom.Infrastructure;
 using Microsoft.Extensions.FileProviders;
 using System.Reflection;
@@ -29,6 +30,10 @@ if (app.Environment.IsDevelopment())
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
+
+app.UseStatusCodePagesWithReExecute("/errors/{0}");
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 

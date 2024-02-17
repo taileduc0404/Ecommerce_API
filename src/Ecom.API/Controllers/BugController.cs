@@ -1,4 +1,4 @@
-﻿
+﻿using Ecom.API.Errors;
 using Ecom.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +20,7 @@ namespace Ecom.API.Controllers
             var product = _context.products.Find(50);
             if (product is null)
             {
-                return NotFound();
+                return NotFound(new BaseCommonResponse(404));
             }
             return Ok(product);
         }
@@ -39,7 +39,7 @@ namespace Ecom.API.Controllers
         [HttpGet("bad-request")]
         public ActionResult GetBadRequest()
         {
-            return BadRequest();
+            return BadRequest(new BaseCommonResponse(400));
         }
     }
 }
