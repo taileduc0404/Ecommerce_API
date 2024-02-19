@@ -20,10 +20,10 @@ namespace Ecom.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAllProducts(string sort)
+        public async Task<ActionResult> GetAllProducts(string sort, int? categoryId)
         {
             //var res = await _u.ProductRepository.GetAllAsync(x => x.Category);
-            var res = await _u.ProductRepository.GetAll(sort);
+            var res = await _u.ProductRepository.GetAll(sort, categoryId);
             var result = _mapper.Map<List<ProductDto>>(res);
             return Ok(result);
         }

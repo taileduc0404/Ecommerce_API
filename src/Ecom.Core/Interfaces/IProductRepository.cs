@@ -10,7 +10,7 @@ namespace Ecom.Core.Interfaces
 {
     public interface IProductRepository : IGenericRepository<Product>
     {
-        Task<IEnumerable<ProductDto>> GetAll(string sort);
+        Task<IEnumerable<ProductDto>> GetAll(string sort, int? categoryId);
         Task<bool> AddAsync(AddProductDto dto);
         Task<bool> UpdateAsync(int id, UpdateProductDto dto);
         Task<bool> DeleteAsyncWithPicture(int id);

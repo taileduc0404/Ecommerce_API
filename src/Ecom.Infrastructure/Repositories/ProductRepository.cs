@@ -23,12 +23,20 @@ namespace Ecom.Infrastructure.Repositories
             this._mapper = mapper;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAll(string sort)
+        public async Task<IEnumerable<ProductDto>> GetAll(string sort, int? categoryId)
         {
             var query = await _context.products
                 .Include(p => p.Category)
                 .AsNoTracking()
                 .ToListAsync();
+            //search by categoryId
+            if (categoryId.HasValue)
+            {
+                query = query.Where(x => x.CategoryId == categoryId.Value).ToList();
+            }
+
+
+            //sort
             if (!string.IsNullOrEmpty(sort))
             {
                 switch (sort)
