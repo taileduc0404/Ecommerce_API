@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Ecom.API.Errors;
 using Ecom.Core.DTOs;
 using Ecom.Core.Entities;
 using Ecom.Core.Interfaces;
@@ -47,7 +48,7 @@ namespace Ecom.API.Controllers
             var category = await _u.CategoryRepository.GetAsync(id);
             if (category == null)
             {
-                return BadRequest($"Category {id} Not Found.");
+                return NotFound(new BaseCommonResponse(404));
             }
             //var newCategoryDto = new ListingCategoryDto
             //{

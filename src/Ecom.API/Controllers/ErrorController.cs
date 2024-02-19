@@ -6,6 +6,7 @@ namespace Ecom.API.Controllers
 {
     [Route("errors/{statusCode}/[action]")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class ErrorController : ControllerBase
     {
         [HttpGet]
