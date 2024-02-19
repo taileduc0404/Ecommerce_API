@@ -23,6 +23,32 @@ namespace Ecom.Infrastructure.Repositories
             this._mapper = mapper;
         }
 
+        public async Task<IEnumerable<ProductDto>> GetAll(string sort)
+        {
+            var query = await _context.products
+                .Include(p => p.Category)
+                .AsNoTracking()
+                .ToListAsync();
+            if (!string.IsNullOrEmpty(sort))
+            {
+                switch (sort)
+                {
+                    case "PriceAsync":
+                        query = query.OrderBy(x => x.Price).ToList();
+                        break;
+                    case "PriceDesc":
+                        query = query.OrderByDescending(x => x.Price).ToList();
+                        break;
+
+                    default:
+                        query = query.OrderBy(x => x.Name).ToList();
+                        break;
+                }
+            }
+            var res = _mapper.Map<List<ProductDto>>(query);
+            return res;
+        }
+
         public async Task<bool> AddAsync(AddProductDto dto)
         {
             var source = "";

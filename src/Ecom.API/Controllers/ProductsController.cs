@@ -12,7 +12,7 @@ namespace Ecom.API.Controllers
     {
         private readonly IUnitOfWork _u;
         private readonly IMapper _mapper;
-         
+
         public ProductsController(IUnitOfWork u, IMapper mapper)
         {
             this._u = u;
@@ -20,16 +20,17 @@ namespace Ecom.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAllProducts()
+        public async Task<ActionResult> GetAllProducts(string sort)
         {
-            var res = await _u.ProductRepository.GetAllAsync(x => x.Category);
+            //var res = await _u.ProductRepository.GetAllAsync(x => x.Category);
+            var res = await _u.ProductRepository.GetAll(sort);
             var result = _mapper.Map<List<ProductDto>>(res);
             return Ok(result);
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(BaseCommonResponse),StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(BaseCommonResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> GetProductById(int id)
         {
             var product = await _u.ProductRepository.GetByIdAsync(id, x => x.Category);
