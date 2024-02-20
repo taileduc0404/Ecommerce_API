@@ -3,9 +3,11 @@ using Azure.Core.Pipeline;
 using Ecom.Core.DTOs;
 using Ecom.Core.Entities;
 using Ecom.Core.Interfaces;
+using Ecom.Core.Shared;
 using Ecom.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Ecom.Infrastructure.Repositories
 {
@@ -23,36 +25,36 @@ namespace Ecom.Infrastructure.Repositories
             this._mapper = mapper;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAll(string sort, int? categoryId, int pageNumber, int pageSize)
+        public async Task<IEnumerable<ProductDto>> GetAll(ProductParams productParams)
         {
             var query = await _context.products
                 .Include(p => p.Category)
                 .AsNoTracking()
                 .ToListAsync();
 
-            //pagination
-            pageNumber = (pageNumber > 0) ? pageNumber : 1;
-            pageSize = (pageSize > 0) ? pageSize : 3;
-            query = query.Skip((pageSize) * (pageNumber - 1)).Take(pageSize).ToList();
-
+            
 
             //search by categoryId
-            if (categoryId.HasValue)
+            if (productParams.CategoryId.HasValue)
             {
-                query = query.Where(x => x.CategoryId == categoryId.Value).ToList();
+                query = query.Where(x => x.CategoryId == productParams.CategoryId.Value).ToList();
             }
 
 
             //sort
-            if (!string.IsNullOrEmpty(sort))
+            if (!string.IsNullOrEmpty(productParams.Sort))
             {
-                query = sort switch
+                query = productParams.Sort switch
                 {
                     "PriceAsync" => query.OrderBy(x => x.Price).ToList(),
                     "PriceDesc" => query.OrderByDescending(x => x.Price).ToList(),
                     _ => query.OrderBy(x => x.Name).ToList(),
                 };
             }
+
+            //pagination
+            query = query.Skip((productParams.PageSize) * (productParams.PageNumber - 1)).Take(productParams.PageSize).ToList();
+
             var res = _mapper.Map<List<ProductDto>>(query);
             return res;
         }

@@ -2,6 +2,7 @@
 using Ecom.API.Errors;
 using Ecom.Core.DTOs;
 using Ecom.Core.Interfaces;
+using Ecom.Core.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecom.API.Controllers
@@ -20,10 +21,10 @@ namespace Ecom.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAllProducts(string sort, int? categoryId, int pageNumber, int pageSize)
+        public async Task<ActionResult> GetAllProducts([FromQuery]ProductParams productParams)
         {
             //var res = await _u.ProductRepository.GetAllAsync(x => x.Category);
-            var res = await _u.ProductRepository.GetAll(sort, categoryId, pageNumber, pageSize);
+            var res = await _u.ProductRepository.GetAll(productParams);
             var result = _mapper.Map<List<ProductDto>>(res);
             return Ok(result);
         }
