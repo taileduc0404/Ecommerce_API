@@ -23,12 +23,19 @@ namespace Ecom.Infrastructure.Repositories
             this._mapper = mapper;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAll(string sort, int? categoryId)
+        public async Task<IEnumerable<ProductDto>> GetAll(string sort, int? categoryId, int pageNumber, int pageSize)
         {
             var query = await _context.products
                 .Include(p => p.Category)
                 .AsNoTracking()
                 .ToListAsync();
+
+            //pagination
+            pageNumber = (pageNumber > 0) ? pageNumber : 1;
+            pageSize = (pageSize > 0) ? pageSize : 3;
+            query = query.Skip((pageSize) * (pageNumber - 1)).Take(pageSize).ToList();
+
+
             //search by categoryId
             if (categoryId.HasValue)
             {
@@ -39,19 +46,12 @@ namespace Ecom.Infrastructure.Repositories
             //sort
             if (!string.IsNullOrEmpty(sort))
             {
-                switch (sort)
+                query = sort switch
                 {
-                    case "PriceAsync":
-                        query = query.OrderBy(x => x.Price).ToList();
-                        break;
-                    case "PriceDesc":
-                        query = query.OrderByDescending(x => x.Price).ToList();
-                        break;
-
-                    default:
-                        query = query.OrderBy(x => x.Name).ToList();
-                        break;
-                }
+                    "PriceAsync" => query.OrderBy(x => x.Price).ToList(),
+                    "PriceDesc" => query.OrderByDescending(x => x.Price).ToList(),
+                    _ => query.OrderBy(x => x.Name).ToList(),
+                };
             }
             var res = _mapper.Map<List<ProductDto>>(query);
             return res;
