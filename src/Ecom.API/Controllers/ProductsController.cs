@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Ecom.API.Errors;
+using Ecom.API.Helper;
 using Ecom.Core.DTOs;
 using Ecom.Core.Interfaces;
 using Ecom.Core.Shared;
@@ -21,12 +22,15 @@ namespace Ecom.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAllProducts([FromQuery]ProductParams productParams)
+        public async Task<ActionResult> GetAllProducts([FromQuery] ProductParams productParams)
         {
             //var res = await _u.ProductRepository.GetAllAsync(x => x.Category);
             var res = await _u.ProductRepository.GetAll(productParams);
-            var result = _mapper.Map<List<ProductDto>>(res);
-            return Ok(result);
+            var totalItem = await _u.ProductRepository.CountAsync();
+            var result = _mapper.Map<IReadOnlyList<ProductDto>>(res);
+
+
+            return Ok(new Pagination<ProductDto>(productParams.PageNumber, productParams.PageSize, totalItem, result));
         }
 
         [HttpGet]
