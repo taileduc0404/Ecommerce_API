@@ -32,7 +32,12 @@ namespace Ecom.Infrastructure.Repositories
                 .AsNoTracking()
                 .ToListAsync();
 
-            
+            //search by name
+            if (!string.IsNullOrEmpty(productParams.Search))
+            {
+                query = query.Where(x => x.Name.ToLower().Contains(productParams.Search)).ToList();
+            }
+
 
             //search by categoryId
             if (productParams.CategoryId.HasValue)

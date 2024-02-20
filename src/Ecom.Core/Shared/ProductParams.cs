@@ -16,5 +16,12 @@
         public string Sort { get; set; }
         public int? CategoryId { get; set; }
         public int PageNumber { get; set; } = 1;
+
+        private string _search;
+        public string Search
+        {
+            get { return _search; }
+            set { _search = value.ToLower(); }
+        }
     }
 }

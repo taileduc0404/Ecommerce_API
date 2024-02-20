@@ -26,9 +26,8 @@ namespace Ecom.API.Controllers
         {
             //var res = await _u.ProductRepository.GetAllAsync(x => x.Category);
             var res = await _u.ProductRepository.GetAll(productParams);
-            var totalItem = await _u.ProductRepository.CountAsync();
             var result = _mapper.Map<IReadOnlyList<ProductDto>>(res);
-
+            var totalItem = res.Count();
 
             return Ok(new Pagination<ProductDto>(productParams.PageNumber, productParams.PageSize, totalItem, result));
         }
