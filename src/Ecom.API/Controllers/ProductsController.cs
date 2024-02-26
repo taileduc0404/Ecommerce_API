@@ -74,7 +74,7 @@ namespace Ecom.API.Controllers
                 if (ModelState.IsValid)
                 {
                     var res = await _u.ProductRepository.UpdateAsync(id, dto);
-                    return res ? Ok(dto) : BadRequest(res);
+                    return res ? Ok(dto) : BadRequest();
                 }
                 return BadRequest(dto);
             }
