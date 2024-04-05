@@ -39,7 +39,7 @@ namespace Ecom.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("categories");
+                    b.ToTable("categories", (string)null);
 
                     b.HasData(
                         new
@@ -97,7 +97,7 @@ namespace Ecom.Infrastructure.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("products");
+                    b.ToTable("products", (string)null);
 
                     b.HasData(
                         new

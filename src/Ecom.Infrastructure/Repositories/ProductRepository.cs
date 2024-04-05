@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Azure.Core.Pipeline;
 using Ecom.Core.DTOs;
 using Ecom.Core.Entities;
 using Ecom.Core.Interfaces;
@@ -7,7 +6,6 @@ using Ecom.Core.Shared;
 using Ecom.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Ecom.Infrastructure.Repositories
 {

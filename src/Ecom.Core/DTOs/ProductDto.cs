@@ -19,6 +19,10 @@ namespace Ecom.Core.DTOs
         public string ProductPicture { get; set; }
     }
 
+    public class ReturnProductDto
+    {
+        public int TotalItems { get; set; }
+    }
     public class AddProductDto : BaseProduct
     {
         public int CategoryId { get; set; }

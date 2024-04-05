@@ -16,7 +16,7 @@ namespace Ecom.API.Helper
         {
             if (!string.IsNullOrEmpty(source.ProductPicture))
             {
-                return _configuration["ApiURL"]+ source.ProductPicture;
+                return _configuration["ApiURL"] + source.ProductPicture;
             }
             return null;
         }
