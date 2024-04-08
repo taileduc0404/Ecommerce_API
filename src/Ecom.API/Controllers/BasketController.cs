@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecom.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class BasketController : ControllerBase
     {
@@ -17,13 +17,13 @@ namespace Ecom.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetBasketById(string basketId)
+        public async Task<IActionResult> GetBasketById(string Id)
         {
-            var basket = await _u.BasketRepository.GetBasketAsync(basketId);
-            return Ok(basket ?? new CustomerBasket());
+            var basket = await _u.BasketRepository.GetBasketAsync(Id);
+            return Ok(basket ?? new CustomerBasket(Id));
         }
 
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> UpdateBasket(CustomerBasket customerBasket)
         {
             var basket = await _u.BasketRepository.UpdateBasketAsync(customerBasket);

@@ -1,23 +1,13 @@
 ﻿using Ecom.Core.Entities;
 using Ecom.Core.Interfaces;
 using StackExchange.Redis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Ecom.Infrastructure.Repositories
 {
     public class BasketRepository : IBasketRepository
     {
         private readonly IDatabase _database;
-
-        public BasketRepository()
-        {
-        }
-
         public BasketRepository(IConnectionMultiplexer redis)
         {
             _database = redis.GetDatabase();
