@@ -30,14 +30,14 @@ namespace Ecom.API.Controllers
 			if (user is null)
 			{
 				// trả về Unauthorized nếu không tìm thấy email 
-				return Unauthorized(new BaseCommonResponse(401, $"This '{dto.Email}' is not found."));
+				return Unauthorized(new BaseCommonResponse(401, $"This Email '{dto.Email}' is not found."));
 			}
 			// kiểm tra password người dùng nhập vào
 			var result = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, false);
 			if (user is null || !result.Succeeded)
 			{
 				// trả về Unauthorized nếu password người dùng nhập vào không đúng
-				return Unauthorized(new BaseCommonResponse(401, $"This '{dto.Password}' is not correct."));
+				return Unauthorized(new BaseCommonResponse(401, $"This Password is not correct."));
 			}
 
 			// nếu thành công tạo và trả về thông tin người dùng
@@ -47,6 +47,12 @@ namespace Ecom.API.Controllers
 				Email = dto.Email,
 				Token = "con mẹ mày"
 			});
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Register(RegisterDto dto)
+		{
+			return Ok();
 		}
 	}
 }
