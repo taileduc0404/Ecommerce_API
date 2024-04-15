@@ -4,6 +4,7 @@ using Ecom.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecom.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240415140409_updateSDD")]
+    partial class updateSDD
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,6 +33,9 @@ namespace Ecom.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
@@ -45,10 +51,15 @@ namespace Ecom.Infrastructure.Data.Migrations
                     b.Property<string>("Street")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ZipCode")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("addresses");
                 });
@@ -59,9 +70,6 @@ namespace Ecom.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AddressId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -112,9 +120,6 @@ namespace Ecom.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AddressId")
-                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -377,15 +382,13 @@ namespace Ecom.Infrastructure.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Ecom.Core.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("Ecom.Core.Entities.Address", b =>
                 {
-                    b.HasOne("Ecom.Core.Entities.Address", "Address")
-                        .WithOne("ApplicationUser")
-                        .HasForeignKey("Ecom.Core.Entities.ApplicationUser", "AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Ecom.Core.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany("Address")
+                        .HasForeignKey("ApplicationUserId");
 
-                    b.Navigation("Address");
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("Ecom.Core.Entities.Product", b =>
@@ -450,9 +453,9 @@ namespace Ecom.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Ecom.Core.Entities.Address", b =>
+            modelBuilder.Entity("Ecom.Core.Entities.ApplicationUser", b =>
                 {
-                    b.Navigation("ApplicationUser");
+                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("Ecom.Core.Entities.Category", b =>
