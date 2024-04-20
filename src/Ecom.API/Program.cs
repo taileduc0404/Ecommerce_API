@@ -1,6 +1,7 @@
 using Ecom.API.Errors;
 using Ecom.API.Extensions;
 using Ecom.API.Middleware;
+using Ecom.Core.Services;
 using Ecom.Infrastructure;
 using StackExchange.Redis;
 
@@ -22,8 +23,6 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(i =>
 	var configure = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"), true);
 	return ConnectionMultiplexer.Connect(configure);
 });
-
-
 
 var app = builder.Build();
 

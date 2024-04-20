@@ -1,7 +1,9 @@
 ﻿using Ecom.API.Errors;
 using Ecom.Core.DTOs;
 using Ecom.Core.Entities;
+using Ecom.Core.Services;
 using Ecom.Infrastructure.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,15 +16,15 @@ namespace Ecom.API.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly ApplicationDbContext _context;
+        private readonly ITokenService _tokenService;
 
         public AccountController(UserManager<ApplicationUser> userManager,
                                  SignInManager<ApplicationUser> signInManager,
-                                 ApplicationDbContext context)
+                                 ITokenService tokenService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _context = context;
+            this._tokenService = tokenService;
         }
 
         [HttpPost]
@@ -48,7 +50,7 @@ namespace Ecom.API.Controllers
             {
                 DisplayName = user.DisplayName,
                 Email = dto.Email,
-                Token = "con mẹ mày"
+                Token = _tokenService.GenerateToken(user)
             });
         }
 
@@ -77,8 +79,16 @@ namespace Ecom.API.Controllers
             {
                 DisplayName = dto.DisplayName,
                 Email = dto.Email,
-                Token = ""
+                Token = _tokenService.GenerateToken(user)
             });
         }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult<string> TestAuthorize()
+        {
+            return "Hi";
+        }
+
     }
 }
