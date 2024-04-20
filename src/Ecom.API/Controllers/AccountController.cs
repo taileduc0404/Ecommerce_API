@@ -55,54 +55,30 @@ namespace Ecom.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterDto dto)
         {
-            try
+            var checkEmailExist = await _userManager.FindByEmailAsync(dto.Email);
+            if (checkEmailExist is not null)
             {
-                var checkEmailExist = await _userManager.FindByEmailAsync(dto.Email);
-                if (checkEmailExist is not null)
-                {
-                    return BadRequest(new BaseCommonResponse(400, "Email mày vừa nhập đã tồn tại trong hệ thống của tao."));
-                }
-                var address = new Address
-                {
-                    FirstName = dto.FirstName,
-                    LastName = dto.LastName,
-                    Street = dto.Street,
-                    City = dto.City,
-                    State = dto.State,
-                    ZipCode = dto.ZipCode
-                };
-
-                // Thêm địa chỉ vào cơ sở dữ liệu
-                _context.addresses.Add(address);
-                await _context.SaveChangesAsync();
-
-                var user = new ApplicationUser
-                {
-                    DisplayName = dto.DisplayName,
-                    UserName = dto.Email,
-                    Email = dto.Email,
-                    Address = address
-                };
-
-                var result = await _userManager.CreateAsync(user, dto.Password);
-
-                if (result.Succeeded == false)
-                {
-                    return BadRequest(new BaseCommonResponse(400));
-                }
-                return Ok(new UserDto
-                {
-                    DisplayName = dto.DisplayName,
-                    Email = dto.Email,
-                    Token = ""
-                });
+                return BadRequest(new BaseCommonResponse(400, "Email mày vừa nhập đã tồn tại trong hệ thống của tao."));
             }
-            catch (Exception ex)
+            var user = new ApplicationUser
             {
-                Console.WriteLine(ex.ToString()); // In ra chi tiết của ngoại lệ vào console
-                throw; // Ném ngoại lệ để hiển thị thông báo lỗi cho client
-                //return StatusCode(500, new BaseCommonResponse(500, "Đã xảy ra lỗi đéo mong muốn, vui lòng liên hệ với tao."));
+                DisplayName = dto.DisplayName,
+                UserName = dto.Email,
+                Email = dto.Email
+            };
+
+            var result = await _userManager.CreateAsync(user, dto.Password);
+
+            if (result.Succeeded == false)
+            {
+                return StatusCode(400, new BaseCommonResponse(400, "Lỗi đăng ký người dùng."));
             }
+            return Ok(new UserDto
+            {
+                DisplayName = dto.DisplayName,
+                Email = dto.Email,
+                Token = ""
+            });
         }
     }
 }
