@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Ecom.API.Controllers
 {
@@ -90,5 +91,26 @@ namespace Ecom.API.Controllers
             return "Hi";
         }
 
-    }
+
+		[Authorize]
+		[HttpGet]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            var email = HttpContext.User?.Claims?.FirstOrDefault(x=>x.Type==ClaimTypes.Email).Value;
+            var user = await _userManager.FindByEmailAsync(email);
+            return Ok(new UserDto
+            {
+                DisplayName = user.DisplayName,
+                Email = user.Email,
+                Token = _tokenService.GenerateToken(user)
+            });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CheckEmailExist([FromQuery] string email)
+        {
+            return Ok(await _userManager.FindByEmailAsync(email) != null);
+        }
+
+	}
 }
