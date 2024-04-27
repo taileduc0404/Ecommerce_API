@@ -62,11 +62,18 @@ namespace Ecom.API.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Register(RegisterDto dto)
 		{
-			var checkEmailExist = await _userManager.FindByEmailAsync(dto.Email);
-			if (checkEmailExist is not null)
+			if (CheckEmailExist(dto.Email).Result.Value)
 			{
-				return BadRequest(new BaseCommonResponse(400, "Email mày vừa nhập đã tồn tại trong hệ thống của tao."));
+				//return BadRequest(new BaseCommonResponse(400, "Email mày vừa nhập đã tồn tại trong hệ thống của tao."));
+				return new BadRequestObjectResult(new ApiValidationErrorResponse
+				{
+					Errors = new[]
+					{
+						"Email mày vừa nhập đã tồn tại trong hệ thống của tao."
+					}
+				});
 			}
+
 			var user = new ApplicationUser
 			{
 				DisplayName = dto.DisplayName,
@@ -112,9 +119,14 @@ namespace Ecom.API.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> CheckEmailExist([FromQuery] string email)
+		public async Task<ActionResult<bool>> CheckEmailExist([FromQuery] string email)
 		{
-			return Ok(await _userManager.FindByEmailAsync(email) != null);
+			var result = await _userManager.FindByEmailAsync(email);
+			if(result is not null)
+			{
+				return true;
+			}
+			return false;
 		}
 
 		[Authorize]
@@ -138,14 +150,19 @@ namespace Ecom.API.Controllers
 			//user.Address = _mapper.Map<Address>(dto); cách ánh xạ 1, ánh xạ từ dto vào Address
 
 			//user.Address = _mapper.Map<AddressDto, Address>(dto);// cách ánh xạ 2
-			
+
 			//cách ánh xạ 3
 			Address address = new Address();
 			user.Address = _mapper.Map(dto, address);
 
-			await _userManager.UpdateAsync(user);
+			var result = await _userManager.UpdateAsync(user);
 
-			return Ok(dto);
+			if (result.Succeeded)
+			{
+				return Ok(_mapper.Map<Address, AddressDto>(user.Address));
+			}
+			//return Ok(dto);
+			return BadRequest($"Problem while updating with {HttpContext.User}'s address");
 		}
 	}
 }
