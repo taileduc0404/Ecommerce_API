@@ -57,8 +57,6 @@ namespace Ecom.Infrastructure
                             ValidateAudience = false
                         };
                     });
-
-
             return services;
         }
 

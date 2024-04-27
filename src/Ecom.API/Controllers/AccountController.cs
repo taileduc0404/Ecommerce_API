@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Ecom.API.Errors;
+using Ecom.API.Extensions;
 using Ecom.Core.DTOs;
 using Ecom.Core.Entities;
 using Ecom.Core.Services;
-using Ecom.Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -95,13 +95,14 @@ namespace Ecom.API.Controllers
 			return "Hi";
 		}
 
-
 		[Authorize]
 		[HttpGet]
 		public async Task<IActionResult> GetCurrentUser()
 		{
-			var email = HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
-			var user = await _userManager.FindByEmailAsync(email);
+			//var email = HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
+			//var user = await _userManager.FindByEmailAsync(email);
+
+			var user = await _userManager.FindEmailByClaimPrincipal(HttpContext.User);
 			return Ok(new UserDto
 			{
 				DisplayName = user.DisplayName,
@@ -120,14 +121,31 @@ namespace Ecom.API.Controllers
 		[HttpGet]
 		public async Task<IActionResult> GetUserAddress()
 		{
-			var email = HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
-			var user = await _userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.Email == email);
-			//return Ok(user.Address is not null ? user.Address : $"'{user.DisplayName}' Not Address");
+			//var email = HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email).Value;
+			//var user = await _userManager.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.Email == email);
+			var user = await _userManager.FindUserByClaimPrincipalWithAddress(HttpContext.User);
 
 			var result = _mapper.Map<Address, AddressDto>(user.Address);
-			return Ok(result);
+			return Ok(result is not null ? result : $"'{user.DisplayName}' Not Address");
 		}
 
+		[Authorize]
+		[HttpPut]
+		public async Task<IActionResult> UpdateUserAddress(AddressDto dto)
+		{
+			var user = await _userManager.FindUserByClaimPrincipalWithAddress(HttpContext.User);
 
+			//user.Address = _mapper.Map<Address>(dto); cách ánh xạ 1, ánh xạ từ dto vào Address
+
+			//user.Address = _mapper.Map<AddressDto, Address>(dto);// cách ánh xạ 2
+			
+			//cách ánh xạ 3
+			Address address = new Address();
+			user.Address = _mapper.Map(dto, address);
+
+			await _userManager.UpdateAsync(user);
+
+			return Ok(dto);
+		}
 	}
 }

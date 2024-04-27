@@ -36,7 +36,7 @@ namespace Ecom.Infrastructure.Repositories
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(10),
+                Expires = DateTime.Now.AddMinutes(3),
                 Issuer = _configuration["Token:Issuer"],
                 SigningCredentials = cre
             };
