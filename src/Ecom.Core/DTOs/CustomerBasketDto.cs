@@ -1,5 +1,4 @@
-﻿using Ecom.Core.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Ecom.Core.DTOs
 {

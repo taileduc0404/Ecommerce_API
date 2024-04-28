@@ -3,6 +3,7 @@ using Ecom.API.Extensions;
 using Ecom.API.Middleware;
 using Ecom.Core.Services;
 using Ecom.Infrastructure;
+using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +14,25 @@ builder.Services.AddControllers();
 builder.Services.AddApiRegestration();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(x =>
+{
+	var securitySchema = new OpenApiSecurityScheme
+	{
+		Name = "Authorization",
+		Description = "JWT Auth Bearer",
+		In = ParameterLocation.Header,
+		Type = SecuritySchemeType.Http,
+		Scheme = "bearer",
+		Reference = new OpenApiReference
+		{
+			Id = "Bearer",
+			Type = ReferenceType.SecurityScheme
+		}
+	};
+	x.AddSecurityDefinition("Bearer", securitySchema);
+	var securityRequirement = new OpenApiSecurityRequirement { { securitySchema, new[] { "Bearer" } } };
+	x.AddSecurityRequirement(securityRequirement);
+});
 builder.Services.InfrastructureConfiguration(builder.Configuration);
 
 

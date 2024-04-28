@@ -99,8 +99,14 @@ namespace Ecom.API.Controllers
 		[HttpGet]
 		public ActionResult<string> TestAuthorize()
 		{
-			return "Hi";
+			if (!User.Identity.IsAuthenticated)
+			{
+				return new ObjectResult("Not Authorized") { StatusCode = 401 };
+			}
+			return "hi";
 		}
+
+
 
 		[Authorize]
 		[HttpGet]

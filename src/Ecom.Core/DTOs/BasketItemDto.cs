@@ -1,5 +1,4 @@
-﻿
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Ecom.Core.DTOs
 {
@@ -14,11 +13,11 @@ namespace Ecom.Core.DTOs
 		[Required]
 		public string ProductPicture { get; set; }
 
-		[Range(0.1, double.MaxValue)]
+		[Range(0.1, double.MaxValue, ErrorMessage = "Giá phải lớn hơn 0")]
 		[Required]
 		public decimal Price { get; set; }
 
-		[Range(1, int.MaxValue)]
+		[Range(1, int.MaxValue, ErrorMessage = "Số lượng phải lớn hơn 0")]
 		[Required]
 		public int Quantity { get; set; }
 
