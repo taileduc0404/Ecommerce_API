@@ -8,19 +8,18 @@ namespace Ecom.Core.Entities.Orders
 		{
 
 		}
-		public Order(string buyerEmail,
-			DateTime orderDate,
-			ShipAddress shipToAddress,
-			DeliveryMethod deliveryMethod,
-			IReadOnlyList<OrderItem> orderItems,
-			decimal subTotal)
+		public Order(string buyerEmail, 
+			ShipAddress shipToAddress, 
+			DeliveryMethod deliveryMethod, 
+			IReadOnlyList<OrderItem> orderItems, 
+			decimal subtotal)
 		{
 			BuyerEmail = buyerEmail;
-			OrderDate = orderDate;
 			ShipToAddress = shipToAddress;
 			DeliveryMethod = deliveryMethod;
 			OrderItems = orderItems;
-			SubTotal = subTotal;
+			SubTotal = subtotal;
+			//PaymentIntentId = paymentIntentId;
 		}
 
 		public string BuyerEmail { get; set; }
@@ -29,6 +28,7 @@ namespace Ecom.Core.Entities.Orders
 		public DeliveryMethod DeliveryMethod { get; set; }
 		public IReadOnlyList<OrderItem> OrderItems { get; set; }
 		public decimal SubTotal { get; set; }
+		public string PaymentIntentId { get; set; }
 		public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
 
 
