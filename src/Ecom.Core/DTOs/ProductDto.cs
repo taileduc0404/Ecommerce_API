@@ -32,7 +32,7 @@ namespace Ecom.Core.DTOs
     public class UpdateProductDto : BaseProduct
     {
         public int CategoryId { get; set; }
-        public string OldImage { get; set; }
+        //public string OldImage { get; set; }
         public IFormFile Image { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace Ecom.API.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<Order>> CreateOrder(OrderDto dto)
+		public async Task<IActionResult> CreateOrder(OrderDto dto)
 		{
 			var email = HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
 			var address = _mapper.Map<AddressDto, ShipAddress>(dto.shipToAddress);

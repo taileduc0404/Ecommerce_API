@@ -94,7 +94,6 @@ namespace Ecom.Infrastructure.Repositories
 		public async Task<bool> UpdateAsync(int id, UpdateProductDto dto)
 		{
 			var currentProduct = await _context.products.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
-			//var currentProduct = await _context.products.FindAsync(id);
 			if (currentProduct is not null)
 			{
 
@@ -126,13 +125,11 @@ namespace Ecom.Infrastructure.Repositories
 				}
 
 				//update product
-				var res = _mapper.Map(dto, currentProduct);
+				var res = _mapper.Map<Product>(dto);
 				res.ProductPicture = src;
 				res.Id = id;
 				_context.products.Update(res);
 				await _context.SaveChangesAsync();
-
-
 				return true;
 
 			}

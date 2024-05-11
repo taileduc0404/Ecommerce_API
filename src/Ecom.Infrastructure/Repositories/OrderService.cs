@@ -3,8 +3,6 @@ using Ecom.Core.Interfaces;
 using Ecom.Core.Services;
 using Ecom.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace Ecom.Infrastructure.Repositories
 {
@@ -45,6 +43,9 @@ namespace Ecom.Infrastructure.Repositories
 
 				items.Add(orderItem);
 			}
+			await _context.orderItems.AddRangeAsync(items);
+			await _context.SaveChangesAsync();
+
 
 			// get delivery method
 			var deliveryMethod = await _context.deliveryMethods.FirstOrDefaultAsync(x => x.Id == deliveryMethodId);
@@ -54,7 +55,7 @@ namespace Ecom.Infrastructure.Repositories
 
 			// initialize in ctor
 			var order = new Order(buyerEmail, shipAddress, deliveryMethod, items, subTotal);
-		
+
 			// check order is not null
 			if (order is null)
 			{
@@ -66,10 +67,9 @@ namespace Ecom.Infrastructure.Repositories
 			await _context.SaveChangesAsync();
 
 			// remove basket
-			await _unitOfWork.BasketRepository.DeleteBasketAsync(basketId);
+			//await _unitOfWork.BasketRepository.DeleteBasketAsync(basketId);
 			return order;
 		}
-
 		public Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync()
 		{
 			throw new NotImplementedException();
