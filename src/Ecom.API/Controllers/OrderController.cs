@@ -51,7 +51,8 @@ namespace Ecom.API.Controllers
 			{
 				return BadRequest(new BaseCommonResponse(404, "Not Found"));
 			}
-			return Ok(order);
+			var result = _mapper.Map<Order, OrderToReturnDto>(order);
+			return Ok(result);
 		}
 
 		[HttpGet]
@@ -59,11 +60,12 @@ namespace Ecom.API.Controllers
 		{
 			var email = HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
 			var order = await _orderService.GetOrderForUserAsync(email);
+			var result = _mapper.Map<IReadOnlyList<Order>, IReadOnlyList<OrderToReturnDto>>(order);
 			if (order is null)
 			{
 				return BadRequest(new BaseCommonResponse(404, "Not Found"));
 			}
-			return Ok(order);
+			return Ok(result);
 		}
 	}
 }

@@ -10,7 +10,6 @@ namespace Ecom.API.MappingProfiles
 		public AddressMapping()
 		{
 			CreateMap<Address, AddressDto>().ReverseMap();
-			CreateMap<ShipAddress, AddressDto>().ReverseMap();
 		}
 	}
 }
