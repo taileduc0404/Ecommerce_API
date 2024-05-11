@@ -79,13 +79,20 @@ namespace Ecom.Infrastructure.Repositories
 				.Where(x => x.Id == id && x.BuyerEmail == buyerEmail)
 				.Include(x=>x.OrderItems).ThenInclude(x=>x.ProductItemOrdered)
 				.Include(x => x.DeliveryMethod)
+				.OrderByDescending(x=>x.OrderDate)
 				.FirstOrDefaultAsync();
 			return order;
 		}
 
-		public Task<IReadOnlyList<Order>> GetOrderForUserAsync(string buyerEmail)
+		public async Task<IReadOnlyList<Order>> GetOrderForUserAsync(string buyerEmail)
 		{
-			throw new NotImplementedException();
+			var order = await _context.orders
+				.Where(x => x.BuyerEmail == buyerEmail)
+				.Include(x => x.OrderItems).ThenInclude(x => x.ProductItemOrdered)
+				.Include(x => x.DeliveryMethod)
+				.OrderByDescending (x=>x.OrderDate)
+				.ToListAsync();
+			return order;
 		}
 	}
 }

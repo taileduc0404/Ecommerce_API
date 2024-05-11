@@ -39,14 +39,30 @@ namespace Ecom.API.Controllers
 		[HttpGet]
 		public async Task<IActionResult> GetDeliveryMethod()
 		{
-			var deliveryMethods = await _orderService.GetDeliveryMethodsAsync();
-			return Ok(deliveryMethods);
+			return Ok(await _orderService.GetDeliveryMethodsAsync());
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> GetOrderById(int id, string buyerEmail)
+		public async Task<IActionResult> GetOrderById(int id)
 		{
-			var order = await _orderService.GetOrderById(id, buyerEmail);
+			var email = HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+			var order = await _orderService.GetOrderById(id, email);
+			if (order is null)
+			{
+				return BadRequest(new BaseCommonResponse(404, "Not Found"));
+			}
+			return Ok(order);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> GetOrderForUser()
+		{
+			var email = HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+			var order = await _orderService.GetOrderForUserAsync(email);
+			if (order is null)
+			{
+				return BadRequest(new BaseCommonResponse(404, "Not Found"));
+			}
 			return Ok(order);
 		}
 	}
