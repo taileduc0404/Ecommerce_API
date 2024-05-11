@@ -42,5 +42,12 @@ namespace Ecom.API.Controllers
 			var deliveryMethods = await _orderService.GetDeliveryMethodsAsync();
 			return Ok(deliveryMethods);
 		}
+
+		[HttpGet]
+		public async Task<IActionResult> GetOrderById(int id, string buyerEmail)
+		{
+			var order = await _orderService.GetOrderById(id, buyerEmail);
+			return Ok(order);
+		}
 	}
 }

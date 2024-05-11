@@ -73,9 +73,14 @@ namespace Ecom.Infrastructure.Repositories
 		public async Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync()
 		=> await _context.deliveryMethods.ToListAsync();
 
-		public Task<Order> GetOrderById(int id, string buyerEmail)
+		public async Task<Order> GetOrderById(int id, string buyerEmail)
 		{
-			throw new NotImplementedException();
+			var order = await _context.orders
+				.Where(x => x.Id == id && x.BuyerEmail == buyerEmail)
+				.Include(x=>x.OrderItems)
+				.Include(x => x.DeliveryMethod)
+				.FirstOrDefaultAsync();
+			return order;
 		}
 
 		public Task<IReadOnlyList<Order>> GetOrderForUserAsync(string buyerEmail)
