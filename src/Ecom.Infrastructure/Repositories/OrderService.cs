@@ -70,10 +70,8 @@ namespace Ecom.Infrastructure.Repositories
 			//await _unitOfWork.BasketRepository.DeleteBasketAsync(basketId);
 			return order;
 		}
-		public Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync()
-		{
-			throw new NotImplementedException();
-		}
+		public async Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync()
+		=> await _context.deliveryMethods.ToListAsync();
 
 		public Task<Order> GetOrderById(int id, string buyerEmail)
 		{

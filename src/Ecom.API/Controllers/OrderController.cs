@@ -35,5 +35,12 @@ namespace Ecom.API.Controllers
 			}
 			return Ok(order);
 		}
+
+		[HttpGet]
+		public async Task<IActionResult> GetDeliveryMethod()
+		{
+			var deliveryMethods = await _orderService.GetDeliveryMethodsAsync();
+			return Ok(deliveryMethods);
+		}
 	}
 }
