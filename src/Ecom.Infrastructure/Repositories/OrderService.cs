@@ -77,7 +77,7 @@ namespace Ecom.Infrastructure.Repositories
 		{
 			var order = await _context.orders
 				.Where(x => x.Id == id && x.BuyerEmail == buyerEmail)
-				.Include(x=>x.OrderItems)
+				.Include(x=>x.OrderItems).ThenInclude(x=>x.ProductItemOrdered)
 				.Include(x => x.DeliveryMethod)
 				.FirstOrDefaultAsync();
 			return order;
