@@ -24,25 +24,25 @@ namespace Ecom.Infrastructure.Repositories
 			var items = new List<OrderItem>();
 
 			// fill item
-			//Parallel.ForEach(basket.BasketItem, async item =>
+			Parallel.ForEach(basket.BasketItem, item =>
+			{
+				var productItem = _unitOfWork.ProductRepository.GetByIdAsync(item.Id).GetAwaiter().GetResult();
+				var productItemOrdered = new ProductItemOrdered(productItem.Id, productItem.Name, productItem.ProductPicture);
+				var orderItem = new OrderItem(productItemOrdered, item.Price, item.Quantity);
+				lock (items)
+				{
+					items.Add(orderItem);
+				}
+			});
+
+			//foreach (var item in basket.BasketItem)
 			//{
 			//	var productItem = await _unitOfWork.ProductRepository.GetByIdAsync(item.Id);
-			//	var productItemOrdered = new ProductItemOrdered(productItem.Id, productItem.Name, productItem.ProductPicture);
-			//	var orderItem = new OrderItem(productItemOrdered, item.Price, item.Quantity);
-			//	lock (items)
-			//	{
-			//		items.Add(orderItem);
-			//	}
-			//});
+			//	var productItemOrderd = new ProductItemOrdered(productItem.Id, productItem.Name, productItem.ProductPicture);
+			//	var orderItem = new OrderItem(productItemOrderd, item.Price, item.Quantity);
 
-			foreach (var item in basket.BasketItem)
-			{
-				var productItem = await _unitOfWork.ProductRepository.GetByIdAsync(item.Id);
-				var productItemOrderd = new ProductItemOrdered(productItem.Id, productItem.Name, productItem.ProductPicture);
-				var orderItem = new OrderItem(productItemOrderd, item.Price, item.Quantity);
-
-				items.Add(orderItem);
-			}
+			//	items.Add(orderItem);
+			//}
 			await _context.orderItems.AddRangeAsync(items);
 			await _context.SaveChangesAsync();
 
@@ -67,7 +67,7 @@ namespace Ecom.Infrastructure.Repositories
 			await _context.SaveChangesAsync();
 
 			// remove basket
-			//await _unitOfWork.BasketRepository.DeleteBasketAsync(basketId);
+			await _unitOfWork.BasketRepository.DeleteBasketAsync(basketId);
 			return order;
 		}
 		public async Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync()
@@ -77,9 +77,9 @@ namespace Ecom.Infrastructure.Repositories
 		{
 			var order = await _context.orders
 				.Where(x => x.Id == id && x.BuyerEmail == buyerEmail)
-				.Include(x=>x.OrderItems).ThenInclude(x=>x.ProductItemOrdered)
+				.Include(x => x.OrderItems).ThenInclude(x => x.ProductItemOrdered)
 				.Include(x => x.DeliveryMethod)
-				.OrderByDescending(x=>x.OrderDate)
+				.OrderByDescending(x => x.OrderDate)
 				.FirstOrDefaultAsync();
 			return order;
 		}
@@ -90,7 +90,7 @@ namespace Ecom.Infrastructure.Repositories
 				.Where(x => x.BuyerEmail == buyerEmail)
 				.Include(x => x.OrderItems).ThenInclude(x => x.ProductItemOrdered)
 				.Include(x => x.DeliveryMethod)
-				.OrderByDescending (x=>x.OrderDate)
+				.OrderByDescending(x => x.OrderDate)
 				.ToListAsync();
 			return order;
 		}

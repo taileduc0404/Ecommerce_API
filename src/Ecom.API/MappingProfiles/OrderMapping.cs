@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Ecom.API.Helper;
 using Ecom.Core.DTOs;
 using Ecom.Core.Entities.Orders;
 
@@ -17,6 +18,7 @@ namespace Ecom.API.MappingProfiles
 				.ForMember(d=>d.ProductItemId,o=>o.MapFrom(s=>s.Id))
 				.ForMember(d=>d.ProductItemName,o=>o.MapFrom(s=>s.ProductItemOrdered.ProductItemName))
 				.ForMember(d=>d.PictureUrl,o=>o.MapFrom(s=>s.ProductItemOrdered.PictureUrl))
+				.ForMember(d=>d.PictureUrl,o=>o.MapFrom<OrderItemUrlResolver>())
 				.ReverseMap();
 		}
 	}
