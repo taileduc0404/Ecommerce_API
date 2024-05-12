@@ -1,11 +1,11 @@
 ﻿namespace Ecom.API.Errors
 {
-    public class ApiValidationErrorResponse : BaseCommonResponse
-    {
-        public ApiValidationErrorResponse() : base(400)
-        {
-        }
+	public class ApiValidationErrorResponse : BaseCommonResponse
+	{
+		public ApiValidationErrorResponse() : base(400)
+		{
+		}
 
-        public IEnumerable<string> Errors { get; set; }
-    }
+		public IEnumerable<string> Errors { get; set; }
+	}
 }

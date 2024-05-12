@@ -5,9 +5,9 @@ namespace Ecom.Core.Entities.Orders
 	public enum OrderStatus
 	{
 		[EnumMember(Value = "Pending")]
-		Pending, 
+		Pending,
 		[EnumMember(Value = "Payment Reveived")]
-		PaymentReveived, 
+		PaymentReveived,
 		[EnumMember(Value = "Payment Felid")]
 		PaymentFelid
 	}

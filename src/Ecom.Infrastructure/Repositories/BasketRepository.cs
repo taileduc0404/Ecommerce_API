@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Ecom.Core.DTOs;
-using Ecom.Core.Entities;
+﻿using Ecom.Core.Entities;
 using Ecom.Core.Interfaces;
 using StackExchange.Redis;
 using System.Text.Json;

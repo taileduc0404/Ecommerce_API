@@ -18,8 +18,8 @@ namespace Ecom.API.Extensions
 				Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")
 				));
 
-            //Configure ApiBehaviorOptions
-            services.Configure<ApiBehaviorOptions>(opt =>
+			//Configure ApiBehaviorOptions
+			services.Configure<ApiBehaviorOptions>(opt =>
 			{
 				opt.InvalidModelStateResponseFactory = context =>
 				{

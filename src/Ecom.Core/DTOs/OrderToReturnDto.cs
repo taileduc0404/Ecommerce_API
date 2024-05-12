@@ -5,8 +5,8 @@ namespace Ecom.Core.DTOs
 {
 	public class OrderToReturnDto
 	{
-        public int Id { get; set; }
-        public string BuyerEmail { get; set; }
+		public int Id { get; set; }
+		public string BuyerEmail { get; set; }
 		public DateTime OrderDate { get; set; }
 		public ShipAddress ShipToAddress { get; set; }
 		public string DeliveryMethod { get; set; }

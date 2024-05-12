@@ -7,8 +7,6 @@ using Ecom.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace Ecom.API.Controllers
 {
@@ -106,8 +104,6 @@ namespace Ecom.API.Controllers
 			return "hi";
 		}
 
-
-
 		[Authorize]
 		[HttpGet]
 		public async Task<IActionResult> GetCurrentUser()
@@ -128,7 +124,7 @@ namespace Ecom.API.Controllers
 		public async Task<ActionResult<bool>> CheckEmailExist([FromQuery] string email)
 		{
 			var result = await _userManager.FindByEmailAsync(email);
-			if(result is not null)
+			if (result is not null)
 			{
 				return true;
 			}

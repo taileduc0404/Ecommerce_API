@@ -2,11 +2,11 @@
 {
 	public class ShipAddress
 	{
-        public ShipAddress()
-        {
-            
-        }
-        public ShipAddress(string firstName, string lastName, string street, string city, string state, string zipCode)
+		public ShipAddress()
+		{
+
+		}
+		public ShipAddress(string firstName, string lastName, string street, string city, string state, string zipCode)
 		{
 			FirstName = firstName;
 			LastName = lastName;

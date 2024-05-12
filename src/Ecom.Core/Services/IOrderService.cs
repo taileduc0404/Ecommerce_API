@@ -7,6 +7,6 @@ namespace Ecom.Core.Services
 		Task<Order> CreateOrderAsync(string buyerEmail, int deliveryMethodId, string basketId, ShipAddress shipAddress);
 		Task<IReadOnlyList<Order>> GetOrderForUserAsync(string buyerEmail);
 		Task<Order> GetOrderById(int id, string buyerEmail);
-		Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync();	
+		Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync();
 	}
 }

@@ -1,4 +1,3 @@
-using Ecom.API.Errors;
 using Ecom.API.Extensions;
 using Ecom.API.Middleware;
 using Ecom.Core.Services;

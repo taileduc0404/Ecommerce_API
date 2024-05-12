@@ -8,10 +8,10 @@ namespace Ecom.Core.Entities.Orders
 		{
 
 		}
-		public Order(string buyerEmail, 
-			ShipAddress shipToAddress, 
-			DeliveryMethod deliveryMethod, 
-			IReadOnlyList<OrderItem> orderItems, 
+		public Order(string buyerEmail,
+			ShipAddress shipToAddress,
+			DeliveryMethod deliveryMethod,
+			IReadOnlyList<OrderItem> orderItems,
 			decimal subtotal)
 		{
 			BuyerEmail = buyerEmail;

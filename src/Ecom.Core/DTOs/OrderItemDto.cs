@@ -1,6 +1,4 @@
-﻿using Ecom.Core.Entities.Orders;
-
-namespace Ecom.Core.DTOs
+﻿namespace Ecom.Core.DTOs
 {
 	public class OrderItemDto
 	{

@@ -1,11 +1,5 @@
 ﻿using Ecom.Core.Entities;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ecom.Infrastructure.Data.Config
 {
@@ -33,7 +27,7 @@ namespace Ecom.Infrastructure.Data.Config
 				};
 
 				await userManager.CreateAsync(user, "P@ssword1");
-				
+
 			}
 		}
 	}
