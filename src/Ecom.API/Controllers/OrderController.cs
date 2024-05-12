@@ -34,7 +34,7 @@ namespace Ecom.API.Controllers
 				return BadRequest(new BaseCommonResponse(400, "Cannot create order"));
 			}
 			return Ok(order);
-		}
+		}  
 
 		[HttpGet]
 		public async Task<IActionResult> GetDeliveryMethod()
