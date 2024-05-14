@@ -67,7 +67,7 @@ namespace Ecom.Infrastructure.Repositories
 			await _context.SaveChangesAsync();
 
 			// remove basket
-			await _unitOfWork.BasketRepository.DeleteBasketAsync(basketId);
+			//await _unitOfWork.BasketRepository.DeleteBasketAsync(basketId);
 			return order;
 		}
 		public async Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync()

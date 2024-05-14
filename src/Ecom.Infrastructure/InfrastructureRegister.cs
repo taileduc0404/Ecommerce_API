@@ -28,6 +28,8 @@ namespace Ecom.Infrastructure
 			// Configure token services
 			services.AddScoped<ITokenService, TokenService>();
 
+			// Configure payment getway
+			services.AddScoped<IPaymentService, PaymentService>();
 
 			//Congifure Db
 			services.AddDbContext<ApplicationDbContext>(options =>
