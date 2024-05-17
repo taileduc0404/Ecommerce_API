@@ -65,7 +65,7 @@ namespace Ecom.Infrastructure.Repositories
 				{
 					Amount = (long)basket.BasketItem.Sum(x => x.Quantity * (x.Price * 100)) + (long)shippingPrice * 100,
 					Currency = "USD",
-					PaymentMethodTypes = new List<string> { "Card" }
+					PaymentMethodTypes = new List<string> { "card" }
 				};
 				await service.UpdateAsync(basket.PaymentIntentId, options);
 			}

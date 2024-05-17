@@ -31,7 +31,6 @@ namespace Ecom.Core.Entities.Orders
 		public string PaymentIntentId { get; set; }
 		public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
 
-
 		public decimal GetTotal()
 		{
 			return SubTotal + DeliveryMethod.Price;
